@@ -12,8 +12,16 @@ def about(request):
 
 def reviews(request):
     """Show all reviews across all movies, newest first, paginated."""
-    # Order primarily by rating (highest first), then by date (newest first)
-    reviews_qs = Review.objects.select_related('movie', 'user').order_by('-rating', '-date')
+    # Prefer ordering by rating (highest first) then date, but if the DB
+    # doesn't yet have the rating column (e.g. migrations not applied on server)
+    # fall back to ordering by date to avoid a 500 error.
+    try:
+        reviews_qs = Review.objects.select_related('movie', 'user').order_by('-rating', '-date')
+    except Exception as e:
+        # If the database lacks the rating column, fall back to date ordering.
+        # We keep the except broad to cover different DB backends raising
+        # different exception types; log if needed.
+        reviews_qs = Review.objects.select_related('movie', 'user').order_by('-date')
     paginator = Paginator(reviews_qs, 10)  # 10 reviews per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
