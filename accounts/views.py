@@ -50,4 +50,33 @@ def orders(request):
     template_data['orders'] = request.user.order_set.all()
     return render(request, 'accounts/orders.html',
         {'template_data': template_data})
+
+
+@login_required
+def subscription(request):
+    """Show the user's subscription level based on total lifetime spending.
+
+    Rules:
+      - Basic: total < 15
+      - Medium: 15 <= total <= 30
+      - Premium: total > 30
+    """
+    # Sum up all Order.total values for this user
+    orders = request.user.order_set.all()
+    total_spent = sum([o.total for o in orders]) if orders.exists() else 0
+
+    # Determine level (totals are stored as integers matching Movie.price units)
+    if total_spent < 15:
+        level = 'Basic'
+    elif total_spent <= 30:
+        level = 'Medium'
+    else:
+        level = 'Premium'
+
+    template_data = {
+        'title': 'Subscription',
+        'total_spent': total_spent,
+        'level': level,
+    }
+    return render(request, 'accounts/subscription.html', {'template_data': template_data})
 # Create your views here.
