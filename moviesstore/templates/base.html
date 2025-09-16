@@ -30,6 +30,7 @@
           <div class="navbar-nav ms-auto navbar-ml">
             <a class="nav-link" href= "{% url 'home.about' %}">About</a>
             <a class="nav-link" href= "{% url 'movies.index' %}">Movies</a>
+            <a class="nav-link" href= "{% url 'home.reviews' %}">Reviews</a>
             <div class="vr bg-white mx-2 d-none d-lg-block"></div>
             {% if user.is_authenticated %}
             <a class="nav-link"
@@ -43,7 +44,7 @@
             <a class="nav-link"
               href="{% url 'accounts.signup' %}">Sign Up</a>
             <a class="nav-link"
-              href="{% url 'cart.index' %}">Cart
+              href="{% url 'cart.index' %}">Cart</a>
             </a>
             {% endif %}
           </div>
@@ -60,10 +61,10 @@
       <div class="container">
         <div class="row mt-3 text-white">
           <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mb-4">
-            <b>MOVIES STORE</b>
+            <b>GT MOVIES STORE</b>
             <hr />
             <p>
-              Welcome to Movies Store, your premier online
+              Welcome to GT Movies Store, your premier online
               destination for a cinematic adventure like no
               other! Dive into the world of movies from the
               comfort of your own home with our user-
@@ -82,10 +83,10 @@
             <b>CONTACT</b>
             <hr />
             <p><i class="fas fa-home me-2"></i>
-              150-2345 Tokyo-to, Japan
+              150-2345 Atlanta, Georgia
             </p>
             <p><i class="fas fa-envelope me-2"></i>
-              info@moviesstore.com
+              info@gtmoviesstore.com
             </p>
             <p><i class="fas fa-phone me-2"></i>
               +81 03-3333-3333
@@ -111,4 +112,47 @@
     </section>
     <!-- Footer -->
   </body>
+  <script>
+    // Attach AJAX handlers for like/unlike forms. Forms should have class 'ajax-like-form'.
+    document.addEventListener('DOMContentLoaded', function () {
+      function handleLikeForm(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const action = form.action;
+        const csrfInput = form.querySelector('input[name=csrfmiddlewaretoken]');
+        const csrftoken = csrfInput ? csrfInput.value : '';
+        fetch(action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Find the button inside the form and update text/class
+          const btn = form.querySelector('button');
+          if (!btn) return;
+          if (data.liked) {
+            btn.classList.remove('btn-outline-primary');
+            btn.classList.add('btn-success');
+            btn.textContent = `Unlike (${data.likes_count})`;
+          } else {
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-primary');
+            btn.textContent = `Like (${data.likes_count})`;
+          }
+        })
+        .catch(err => {
+          console.error('Like toggle failed', err);
+        });
+      }
+
+      document.querySelectorAll('form.ajax-like-form').forEach(f => {
+        f.addEventListener('submit', handleLikeForm);
+      });
+    });
+  </script>
 </html>

@@ -9,4 +9,6 @@ urlpatterns = [
         views.edit_review, name='movies.edit_review'),
     path('<int:id>/review/<int:review_id>/delete/',
         views.delete_review, name='movies.delete_review'),
+    path('<int:id>/review/<int:review_id>/toggle-like/',
+        views.toggle_like, name='movies.toggle_like'),
 ]

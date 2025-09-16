@@ -39,9 +39,19 @@
               Review by {{ review.user.username }}
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
-              {{ review.date }}
+              {{ review.date }} &mdash; Rating: {{ review.rating }} / 5
             </h6>
             <p class="card-text">{{ review.comment }}</p>
+            <div>
+              <form method="post" action="{% url 'movies.toggle_like' id=template_data.movie.id review_id=review.id %}" style="display:inline" class="ajax-like-form">
+                {% csrf_token %}
+                {% if user.is_authenticated and user in review.likes.all %}
+                  <button type="submit" class="btn btn-sm btn-success">Unlike ({{ review.likes.count }})</button>
+                {% else %}
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Like ({{ review.likes.count }})</button>
+                {% endif %}
+              </form>
+            </div>
             {% if user.is_authenticated and user == review.user %}
             <a class="btn btn-primary"
               href="{% url 'movies.edit_review' id=template_data.movie.id review_id=review.id %}">Edit
@@ -68,6 +78,16 @@
                       <textarea name="comment" required
                       class="form-control"
                       id="comment"></textarea>
+                    </p>
+                    <p>
+                      <label for="rating">Rating:</label>
+                      <select name="rating" id="rating" class="form-control" style="width:120px">
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                      </select>
                     </p>
                     <div class="text-center">
                       <button type="submit"

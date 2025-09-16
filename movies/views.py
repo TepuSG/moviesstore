@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden, JsonResponse
 def index(request):
     search_term = request.GET.get('search')
     if search_term:
@@ -25,12 +26,35 @@ def create_review(request, id):
         movie = Movie.objects.get(id=id)
         review = Review()
         review.comment = request.POST['comment']
+        # Accept rating if provided, otherwise default in model
+        try:
+            review.rating = int(request.POST.get('rating', review.rating))
+        except Exception:
+            pass
         review.movie = movie
         review.user = request.user
         review.save()
         return redirect('movies.show', id=id)
     else:
         return redirect('movies.show', id=id)
+
+
+@login_required
+def toggle_like(request, id, review_id):
+    # Toggle a like on a review. Accepts POST only.
+    if request.method != 'POST':
+        return HttpResponseForbidden()
+    review = get_object_or_404(Review, id=review_id)
+    if request.user in review.likes.all():
+        review.likes.remove(request.user)
+        liked = False
+    else:
+        review.likes.add(request.user)
+        liked = True
+    # If this was ajax, return json with updated count
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'liked': liked, 'likes_count': review.likes.count()})
+    return redirect('movies.show', id=id)
 @login_required
 def edit_review(request, id, review_id):
     review = get_object_or_404(Review, id=review_id)
