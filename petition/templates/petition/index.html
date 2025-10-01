@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-8 mx-auto mb-3">
+        <h2>Petition to Add a Movie</h2>
+        <hr />
+        {% if template_data.error %}
+          <div class="alert alert-danger">{{ template_data.error }}</div>
+        {% endif %}
+        <form method="post" action="{% url 'petition.create' %}">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" name="title" class="form-control" placeholder="Enter a movie title to petition" />
+            <button type="submit" class="btn bg-dark text-white">Create Petition</button>
+          </div>
+        </form>
+
+        <h3 class="mt-4">Community Petitions</h3>
+        <hr />
+        {% if template_data.petitions %}
+          <div class="row">
+            {% for p in template_data.petitions %}
+              <div class="col-md-6 mb-3">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ p.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Submitted by {{ p.user.username }} — {{ p.date|date:"M d, Y H:i" }}</h6>
+                    <div>
+                      <form method="post" action="{% url 'petition.toggle_like' id=p.id %}" style="display:inline" class="ajax-like-form">
+                        {% csrf_token %}
+                        {% if user.is_authenticated and user in p.likes.all %}
+                          <button type="submit" class="btn btn-sm btn-success">Unlike ({{ p.likes.count }})</button>
+                        {% else %}
+                          <button type="submit" class="btn btn-sm btn-outline-primary">Like ({{ p.likes.count }})</button>
+                        {% endif %}
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">No petitions yet. Be the first to propose a movie!</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
