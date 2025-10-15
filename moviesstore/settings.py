@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-jozuv(e=@*fzjm2-$fdu0ir3o_bh++81ih784&5)8ge^20s4a6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS', '')
-ALLOWED_HOSTS = ALLOWED_HOSTS_ENV.split(',') if ALLOWED_HOSTS_ENV else []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -122,8 +120,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+<<<<<<< HEAD
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+=======
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+>>>>>>> c0a7580 (Resolved conflicts)
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
