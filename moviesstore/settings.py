@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'cart',
     'petition',
+    'moviemap',
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+MAPBOX_KEY = 'pk.eyJ1Ijoic2FtdWVsZ2FseXNoIiwiYSI6ImNtZnp1aXlhbzA2amIybG9yaGp4dGVjODIifQ.jrTDRV67UtvzllABcKqVOA'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
