@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3">
+  <div class="container text-center">
+    <h2>Confirm Purchase</h2>
+    <p>Please enter your location so we can show trending movies near you.</p>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="location" class="form-label">Location (City or Zip Code)</label>
+        <input type="text" name="location" id="location" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success">Complete Purchase</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
