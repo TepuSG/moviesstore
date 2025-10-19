@@ -11,4 +11,6 @@ urlpatterns = [
         views.delete_review, name='movies.delete_review'),
     path('<int:id>/review/<int:review_id>/toggle-like/',
         views.toggle_like, name='movies.toggle_like'),
+    path('<int:id>/rating/submit/', views.submit_rating,
+        name='movies.submit_rating'),
 ]
