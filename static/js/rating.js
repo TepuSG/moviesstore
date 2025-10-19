@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
       star.addEventListener('click', function(){
         const value = star.getAttribute('data-value');
         // Send AJAX POST to submit rating
-        fetch(`/${movieId}/rating/submit/`, {
+        fetch(`/movies/${movieId}/rating/submit/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
