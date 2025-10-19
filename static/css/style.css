@@ -39,3 +39,48 @@
   width: fit-content;
   max-height: 400px;
 }
+
+/* Rating Stars Styles */
+.stars-display .star,
+.stars-input .star-input {
+  font-size: 1.5rem;
+  color: #ddd;
+  cursor: default;
+  transition: color 0.2s ease;
+}
+
+.stars-input .star-input {
+  cursor: pointer;
+}
+
+.stars-input .star-input:hover,
+.stars-input .star-input.hover {
+  color: #ffc107;
+}
+
+.stars-display .star.filled,
+.stars-input .star-input.filled {
+  color: #ffc107;
+}
+
+.rating-widget {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.rating-status {
+  min-height: 20px;
+}
+
+.movie-rating-section {
+  border-top: 1px solid #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+  padding: 20px 0;
+}
+
+.rating-text {
+  font-weight: 500;
+  color: #495057;
+}

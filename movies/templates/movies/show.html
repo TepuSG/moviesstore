@@ -9,6 +9,53 @@
         <hr />
         <p><b>Description:</b> {{ template_data.movie.description }}</p>
         <p><b>Price:</b> ${{ template_data.movie.price }}</p>
+        
+        <!-- Movie Rating Section -->
+        <div class="movie-rating-section mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <h5 class="mb-0 me-3">Rating:</h5>
+            <div class="rating-display me-3">
+              {% if template_data.average_rating > 0 %}
+                <div class="stars-display" data-rating="{{ template_data.average_rating }}">
+                  {% for i in "12345" %}
+                    <span class="star" data-value="{{ forloop.counter }}">★</span>
+                  {% endfor %}
+                </div>
+                <span class="rating-text ms-2">
+                  {{ template_data.average_rating|floatformat:1 }}/5 
+                  ({{ template_data.rating_count }} rating{{ template_data.rating_count|pluralize }})
+                </span>
+              {% else %}
+                <span class="text-muted">No ratings yet</span>
+              {% endif %}
+            </div>
+          </div>
+          
+          {% if user.is_authenticated %}
+          <div class="user-rating-section">
+            <h6>Your Rating:</h6>
+            <div class="rating-widget" data-movie-id="{{ template_data.movie.id }}">
+              <div class="stars-input">
+                {% for i in "12345" %}
+                  <span class="star-input" data-value="{{ forloop.counter }}">★</span>
+                {% endfor %}
+              </div>
+              <div class="rating-status mt-2">
+                {% if template_data.user_rating %}
+                  <small class="text-success">You rated this movie {{ template_data.user_rating.rating }}/5 stars</small>
+                {% else %}
+                  <small class="text-muted">Click a star to rate this movie</small>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="text-muted">
+            <small><a href="{% url 'accounts.login' %}">Login</a> to rate this movie</small>
+          </div>
+          {% endif %}
+        </div>
+        
         <p class="card-text">
           <form method="post"
             action="{% url 'cart.add' id=template_data.movie.id %}">
