@@ -11,7 +11,7 @@
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">{{ review.movie.name }}</h5>
-										<h6 class="card-subtitle mb-2 text-muted">Review by {{ review.user.username }} — {{ review.date|date:"M d, Y H:i" }} — Rating: {{ review.rating }} / 5</h6>
+										<h6 class="card-subtitle mb-2 text-muted">Review by {{ review.user.username }} — {{ review.date|date:"M d, Y H:i" }}</h6>
 										<p class="card-text">{{ review.comment }}</p>
 										<div>
 																  <form method="post" action="{% url 'movies.toggle_like' id=review.movie.id review_id=review.id %}" style="display:inline" class="ajax-like-form">
